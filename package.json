@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "antd": "^3.9.2",
+    "firebase": "^5.5.0",
     "prop-types": "^15.6.2",
     "react": "^16.5.1",
     "react-dom": "^16.5.1",
@@ -11,10 +12,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && yarn post-build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "deploy:netlify": "netlify deploy",
+    "post-build": "echo '/*  /index.html  200' > build/_redirects"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
