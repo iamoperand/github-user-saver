@@ -9,7 +9,11 @@ import axios from 'axios';
 import { githubApiRoutes } from '../../config/apiRoutes';
 import db from '../../config/firebase';
 import userTableColumns from '../../helpers/userTableColumns';
-import { successNotify, errorNotify } from '../../helpers/messageNotify';
+import {
+  successNotify,
+  errorNotify,
+} from '../../helpers/messageNotify';
+import { usersCollection } from '../../config/constants';
 
 
 const { Search } = Input;
@@ -20,7 +24,7 @@ class SearchUser extends Component {
   }
 
   componentDidMount = () => {
-    db.collection('users').onSnapshot((snapshot) => {
+    db.collection(usersCollection).onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === 'added') {
           this.setState(prevState => ({
@@ -51,7 +55,7 @@ class SearchUser extends Component {
       } = data;
 
       try {
-        await db.collection('users').add({
+        await db.collection(usersCollection).add({
           id,
           username,
           name,
@@ -75,23 +79,21 @@ class SearchUser extends Component {
     const { users } = this.state;
     return (
       <div>
-        <div>
-          <Card style={{ width: '80vw' }}>
-            <div>
-              <h1>
-                Explore GitHub
-              </h1>
-              <Search
-                placeholder="Enter username..."
-                onSearch={searchQuery => this.onSearchHandler(searchQuery)}
-                enterButton
-              />
-            </div>
-            <div style={{ margin: '2em auto' }}>
-              <Table columns={userTableColumns} dataSource={users} rowKey={record => record.id} />
-            </div>
-          </Card>
-        </div>
+        <Card style={{ width: '80vw' }}>
+          <div>
+            <h1>
+              Explore GitHub
+            </h1>
+            <Search
+              placeholder="Enter username..."
+              onSearch={searchQuery => this.onSearchHandler(searchQuery)}
+              enterButton
+            />
+          </div>
+          <div style={{ margin: '2em auto' }}>
+            <Table columns={userTableColumns} dataSource={users} rowKey={record => record.id} />
+          </div>
+        </Card>
       </div>
     );
   }
