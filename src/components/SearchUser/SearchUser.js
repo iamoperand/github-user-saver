@@ -15,6 +15,7 @@ import {
 } from '../../helpers/messageNotify';
 import { usersCollection } from '../../config/constants';
 
+import LoadingCard from '../LoadingCard';
 import Headings from '../StyledComponents/Headings';
 import FlexCenteredDiv from '../StyledComponents/FlexCenteredDiv';
 
@@ -27,10 +28,14 @@ const {
 class SearchUser extends Component {
   state = {
     users: [],
+    isPageLoading: true,
   }
 
   componentDidMount = () => {
     db.collection(usersCollection).onSnapshot((snapshot) => {
+      this.setState({
+        isPageLoading: false,
+      });
       snapshot.docChanges().forEach((change) => {
         if (change.type === 'added') {
           this.setState(prevState => ({
@@ -72,6 +77,7 @@ class SearchUser extends Component {
           following,
           createdAt,
         });
+
         successNotify('User saved successfully!');
       } catch (e) {
         errorNotify('Problem occurred in saving the user :(');
@@ -82,7 +88,7 @@ class SearchUser extends Component {
   }
 
   render() {
-    const { users } = this.state;
+    const { users, isPageLoading } = this.state;
     return (
       <FlexCenteredDiv style={{ minHeight: '100vh' }}>
         <Card style={{ width: '80vw', textAlign: 'center' }}>
@@ -97,9 +103,11 @@ class SearchUser extends Component {
               style={{ width: 500, margin: '20px 0' }}
             />
           </div>
-          <div style={{ margin: '2em auto' }}>
-            <Table columns={userTableColumns} dataSource={users} rowKey={record => record.id} />
-          </div>
+          <LoadingCard loading={isPageLoading}>
+            <div style={{ margin: '2em auto' }}>
+              <Table columns={userTableColumns} dataSource={users} rowKey={record => record.id} />
+            </div>
+          </LoadingCard>
         </Card>
       </FlexCenteredDiv>
     );
