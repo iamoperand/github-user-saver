@@ -5,40 +5,13 @@ import {
   Card,
 } from 'antd';
 import axios from 'axios';
-import moment from 'moment';
 
 import { githubApiRoutes } from '../../config/apiRoutes';
 import db from '../../config/firebase';
+import userTableColumns from '../../helpers/userTableColumns';
 
 
 const { Search } = Input;
-
-
-const columns = [{
-  title: 'Username',
-  dataIndex: 'username',
-  render: (text, record) => <a href={record.url}>{text}</a>,
-}, {
-  title: 'Name',
-  dataIndex: 'name',
-}, {
-  title: 'Public Repos',
-  dataIndex: 'publicRepos',
-}, {
-  title: 'Public Guests',
-  dataIndex: 'publicGuests',
-}, {
-  title: 'Followers',
-  dataIndex: 'followers',
-}, {
-  title: 'Following',
-  dataIndex: 'following',
-}, {
-  title: 'Created At',
-  dataIndex: 'createdAt',
-  render: timestamp => moment(timestamp).format('MM/DD/YYYY'),
-}];
-
 
 class SearchUser extends Component {
   state = {
@@ -114,7 +87,7 @@ class SearchUser extends Component {
               />
             </div>
             <div style={{ margin: '2em auto' }}>
-              <Table columns={columns} dataSource={users} rowKey={record => record.id} />
+              <Table columns={userTableColumns} dataSource={users} rowKey={record => record.id} />
             </div>
           </Card>
         </div>
