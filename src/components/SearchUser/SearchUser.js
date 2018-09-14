@@ -15,8 +15,14 @@ import {
 } from '../../helpers/messageNotify';
 import { usersCollection } from '../../config/constants';
 
+import Headings from '../StyledComponents/Headings';
+import FlexCenteredDiv from '../StyledComponents/FlexCenteredDiv';
+
 
 const { Search } = Input;
+const {
+  CenteredH1,
+} = Headings;
 
 class SearchUser extends Component {
   state = {
@@ -78,23 +84,24 @@ class SearchUser extends Component {
   render() {
     const { users } = this.state;
     return (
-      <div>
-        <Card style={{ width: '80vw' }}>
+      <FlexCenteredDiv style={{ minHeight: '100vh' }}>
+        <Card style={{ width: '80vw', textAlign: 'center' }}>
           <div>
-            <h1>
+            <CenteredH1>
               Explore GitHub
-            </h1>
+            </CenteredH1>
             <Search
               placeholder="Enter username..."
               onSearch={searchQuery => this.onSearchHandler(searchQuery)}
               enterButton
+              style={{ width: 500, margin: '20px 0' }}
             />
           </div>
           <div style={{ margin: '2em auto' }}>
             <Table columns={userTableColumns} dataSource={users} rowKey={record => record.id} />
           </div>
         </Card>
-      </div>
+      </FlexCenteredDiv>
     );
   }
 }
