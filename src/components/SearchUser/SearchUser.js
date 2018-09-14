@@ -52,7 +52,7 @@ class SearchUser extends Component {
         id,
         login: username,
         name,
-        url,
+        html_url: url,
         public_repos: publicRepos,
         public_gists: publicGuests,
         followers,

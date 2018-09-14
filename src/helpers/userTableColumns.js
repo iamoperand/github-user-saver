@@ -5,7 +5,9 @@ import moment from 'moment';
 const userTableColumns = [{
   title: 'Username',
   dataIndex: 'username',
-  render: (text, record) => <a href={record.url}>{text}</a>,
+  render: (text, record) => (
+    <a href={record.url} target="_blank" rel="noopener noreferrer">{text}</a>
+  ),
 }, {
   title: 'Name',
   dataIndex: 'name',
