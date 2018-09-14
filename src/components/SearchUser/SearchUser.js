@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import {
   Input,
-  // Table,
+  Table,
   Card,
 } from 'antd';
 import axios from 'axios';
-// import isEmpty from 'lodash/isEmpty';
-// import moment from 'moment';
+import moment from 'moment';
 
 import { githubApiRoutes } from '../../config/apiRoutes';
 import db from '../../config/firebase';
@@ -15,18 +14,49 @@ import db from '../../config/firebase';
 const { Search } = Input;
 
 
-// const columns = [{
-//   title: 'Username',
-//   dataIndex: 'username',
-//   key: 'username',
-// }, {
-//   title: 'Username',
-//   dataIndex: 'login',
-//   key: 'login',
-// }];
+const columns = [{
+  title: 'Username',
+  dataIndex: 'username',
+  render: (text, record) => <a href={record.url}>{text}</a>,
+}, {
+  title: 'Name',
+  dataIndex: 'name',
+}, {
+  title: 'Public Repos',
+  dataIndex: 'publicRepos',
+}, {
+  title: 'Public Guests',
+  dataIndex: 'publicGuests',
+}, {
+  title: 'Followers',
+  dataIndex: 'followers',
+}, {
+  title: 'Following',
+  dataIndex: 'following',
+}, {
+  title: 'Created At',
+  dataIndex: 'createdAt',
+  render: timestamp => moment(timestamp).format('MM/DD/YYYY'),
+}];
 
 
 class SearchUser extends Component {
+  state = {
+    users: [],
+  }
+
+  componentDidMount = () => {
+    db.collection('users').onSnapshot((snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === 'added') {
+          this.setState(prevState => ({
+            users: [...prevState.users, change.doc.data()],
+          }));
+        }
+      });
+    });
+  }
+
   onSearchHandler = async (searchQuery) => {
     try {
       const axiosConfig = {
@@ -35,6 +65,7 @@ class SearchUser extends Component {
 
       const { data } = await axios(`${githubApiRoutes.SearchUsers}/${searchQuery}`, axiosConfig);
       const {
+        id,
         login: username,
         name,
         url,
@@ -47,6 +78,7 @@ class SearchUser extends Component {
 
       try {
         await db.collection('users').add({
+          id,
           username,
           name,
           url,
@@ -66,6 +98,7 @@ class SearchUser extends Component {
   }
 
   render() {
+    const { users } = this.state;
     return (
       <div>
         <div>
@@ -80,9 +113,9 @@ class SearchUser extends Component {
                 enterButton
               />
             </div>
-            {/* <div style={{ margin: '2em auto' }}>
+            <div style={{ margin: '2em auto' }}>
               <Table columns={columns} dataSource={users} rowKey={record => record.id} />
-            </div> */}
+            </div>
           </Card>
         </div>
       </div>
