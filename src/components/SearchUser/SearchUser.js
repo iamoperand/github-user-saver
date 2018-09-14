@@ -9,6 +9,7 @@ import axios from 'axios';
 import { githubApiRoutes } from '../../config/apiRoutes';
 import db from '../../config/firebase';
 import userTableColumns from '../../helpers/userTableColumns';
+import { successNotify, errorNotify } from '../../helpers/messageNotify';
 
 
 const { Search } = Input;
@@ -61,12 +62,12 @@ class SearchUser extends Component {
           following,
           createdAt,
         });
-        console.log('saved successfully!');
+        successNotify('User saved successfully!');
       } catch (e) {
-        console.log('failed to save');
+        errorNotify('Problem occurred in saving the user :(');
       }
     } catch (e) {
-      console.log('error');
+      errorNotify('No user found!');
     }
   }
 
