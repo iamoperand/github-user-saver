@@ -8,3 +8,8 @@ export const errorNotify = (text) => {
 export const successNotify = (text) => {
   message.success(text);
 };
+
+export const loadingNotify = (text, timeoutInms) => {
+  const hide = message.loading(text, 0);
+  setTimeout(hide, timeoutInms);
+};

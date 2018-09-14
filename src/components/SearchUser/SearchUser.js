@@ -12,6 +12,7 @@ import userTableColumns from '../../helpers/userTableColumns';
 import {
   successNotify,
   errorNotify,
+  loadingNotify,
 } from '../../helpers/messageNotify';
 import { usersCollection } from '../../config/constants';
 
@@ -47,6 +48,8 @@ class SearchUser extends Component {
   }
 
   onSearchHandler = async (searchQuery) => {
+    loadingNotify('Submitting...', 1000);
+
     try {
       const axiosConfig = {
         method: 'GET',
